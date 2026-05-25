@@ -1,0 +1,51 @@
+# ============================================================
+# Backend (Django / Python)
+# ============================================================
+
+# Virtual environment (recreated via requirements.txt)
+backend/venv/
+backend/env/
+backend/.venv/
+
+# Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django
+backend/*.sqlite3
+backend/db.sqlite3
+backend/staticfiles/
+backend/media/
+
+# Local config / secrets
+backend/.env
+backend/local_settings.py
+
+# ============================================================
+# Frontend (Flutter / Dart)
+# ============================================================
+
+frontend/.dart_tool/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.packages
+frontend/.pub-cache/
+frontend/.pub/
+frontend/build/
+frontend/ios/Pods/
+frontend/android/.gradle/
+frontend/android/app/build/
+
+# ============================================================
+# Editor / OS
+# ============================================================
+
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
