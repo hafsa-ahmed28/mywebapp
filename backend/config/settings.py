@@ -143,3 +143,4 @@ EMAIL_USE_TLS = True #Encrypt the connection to Gmail
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '') #Sender Gmail (env var in ~/.bashrc on the VM)
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '') #16-char app password
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@example.com') #From: field of the verification email
+AUTH_USER_MODEL = 'accounts.User' # tells Django to use our custom User model instead of the built-in one
