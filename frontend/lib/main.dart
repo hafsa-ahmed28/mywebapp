@@ -1,74 +1,64 @@
-// Flutter's UI building blocks
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; //Flutter UI building blocks
+import 'signup_screen.dart'; //signup screen
+import 'login_screen.dart'; //login screen
 
-// Our two screens
-import 'signup_screen.dart';
-import 'login_screen.dart';
-
-// runApp is the entry point - it's the first thing Flutter calls
-void main() {
+void main() { //entry point, first thing Flutter runs
   runApp(const MyApp());
 }
 
-// Top-level app widget. Stateless because the app itself doesn't change.
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget { //stateless bec the app shell never changes
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TriSpects Auth',
-      // Theme = colors, fonts, shapes used across the whole app
+      title: 'MyWebApp',
+      debugShowCheckedModeBanner: false, //hides the debug banner in the top corner
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blue, //sets the color theme across the whole app
         useMaterial3: true,
       ),
-      // The first screen the user sees
-      home: const HomeScreen(),
+      home: const HomeScreen(), //first screen the user sees
     );
   }
 }
 
-// Landing screen with two buttons: Sign Up and Log In
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatelessWidget { //stateless because nothing on this screen changes
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TriSpects')),
+      appBar: AppBar(title: const Text('MyWebApp')),
       body: Center(
-        // Stack the welcome text + buttons vertically, centered on screen
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center, //centers everything vertically
           children: [
             const Text(
               'Welcome',
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 8), //spacing
             const Text(
               'Sign up or log in to continue',
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
-            const SizedBox(height: 40),
-            // Sign Up button — Navigator.push opens a new screen on top
+            const SizedBox(height: 40), //spacing
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const SignupScreen()),
+                  MaterialPageRoute(builder: (_) => const SignupScreen()), //opens signup screen on top
                 );
               },
               child: const Text('Sign Up'),
             ),
-            const SizedBox(height: 12),
-            // Log In button — same pattern, different destination
+            const SizedBox(height: 12), //spacing
             OutlinedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  MaterialPageRoute(builder: (_) => const LoginScreen()), //opens login screen on top
                 );
               },
               child: const Text('Log In'),

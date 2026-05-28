@@ -10,41 +10,53 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-from pathlib import Path
-import pymysql
+import os #reads env var (secrets stored outside the code)
+from pathlib import Path #builds file paths that work on any OS
+import pymysql #connects Django to MariaDB
+
+# Disguises pymysql as MySQLdb so Django doesn't know the difference
 pymysql.install_as_MySQLdb()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+# Root of the project folder (/home/myproject)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY
+# Secret key used by Django for encryption/security — read from env var, never hardcoded
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-only-not-secure-replace-me')
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# Shows detailed error pages — True for dev only, must be False in production
 DEBUG = True
 
+# Only respond to requests from these addresses — rejects everything else
 ALLOWED_HOSTS = ['10.0.0.216', 'localhost', '127.0.0.1']
 
 
-# Application definition
-
+# APPS
 INSTALLED_APPS = [
+    # Built-in Django apps (pre-written, do not remove)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Third-party: adds REST API tools (DRF)
     'rest_framework',
+    # Third-party: allows Flutter (different origin) to talk to Django
     'corsheaders',
+    # Our custom app — handles user signup, verification, login
     'accounts',
 ]
 
+
+# MIDDLEWARE
+
+# Every request passes through these in order before reaching a view
 MIDDLEWARE = [
+    # CORS must be first, adds headers that allow Flutter's requests through
     'corsheaders.middleware.CorsMiddleware',
+    # The rest are built-in Django security/session handlers (pre-written)
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,6 +66,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+# URL & TEMPLATE CONFIG (pre-written)
+
+# Tells Django where the main URL file lives
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -71,71 +87,59 @@ TEMPLATES = [
     },
 ]
 
+# Entry point for the web server
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
+# DATABASE
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-	'NAME': 'django_db',
-	'USER': 'root',
-	'PASSWORD': '',
-	'HOST': 'localhost',
-	'PORT': '3306',
-	'OPTIONS': {
-		'unix_socket': '/run/mysqld/mysqld.sock',
-	   }
-     }
+        'ENGINE': 'django.db.backends.mysql', #Mode
+        'NAME': 'django_db', #Database name created
+        'USER': 'root', #Root: MariaDB's default admin account
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            # Connect via socket file instead of network
+            'unix_socket': '/run/mysqld/mysqld.sock',
+        }
+    }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
+# PASSWORD VALIDATION (pre-written)
+
+# Built-in rules Django checks when a password is set
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # Can't be too similar to username/email
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    # Must meet minimum length
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    # Can't be a commonly used password
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    # Can't be entirely numbers
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
+# INTERNATIONALISATION (pre-written)
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
+# STATIC FILES (pre-written)
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-import os
+# EMAIL (Gmail SMTP)
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@example.com')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' #Use SMTP to send emails
+EMAIL_HOST = 'smtp.gmail.com' #Gmail's SMTP server address
+EMAIL_PORT = 587 #Gmail's secure sending port
+EMAIL_USE_TLS = True #Encrypt the connection to Gmail
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '') #Sender Gmail (env var in ~/.bashrc on the VM)
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '') #16-char app password
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@example.com') #From: field of the verification email

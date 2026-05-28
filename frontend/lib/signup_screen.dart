@@ -1,12 +1,7 @@
-// Flutter's UI building blocks 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; //Flutter UI building blocks
+import 'api_service.dart'; //backend communication helper
 
-// Our own API helper from earlier
-import 'api_service.dart';
-
-// "Stateful" for the data that changes whie user interacts 
-// (typed text, loading state, error messages)
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends StatefulWidget { //stateful because text, loading, & mssgs change
   const SignupScreen({super.key});
 
   @override
@@ -14,87 +9,69 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  // Controllers = handles for reading what the user typed into each field
-  final _emailController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(); //reads what user typed in email field
+  final _usernameController = TextEditingController(); //reads what user typed in username field
+  final _passwordController = TextEditingController(); //reads what user typed in password field
 
-  // Tracks whether we're currently waiting on the backend (to show a spinner)
-  bool _isLoading = false;
-  // Holds any error or success message to show under the form
-  String _message = '';
+  bool _isLoading = false; //true while waiting for Django to respond
+  String _message = ''; //success or error message shown below the form
 
-  // Called when the user taps the Sign Up button
-  Future<void> _handleSignup() async {
-    // setState tells Flutter "redraw the screen, something changed"
-    setState(() {
+  Future<void> _handleSignup() async { //runs when user taps Sign Up
+    setState(() { //tell Flutter to redraw
       _isLoading = true;
       _message = '';
     });
 
-    // Call the backend via our ApiService
-    final result = await ApiService.signup(
+    final result = await ApiService.signup( //send data to Django
       email: _emailController.text,
       username: _usernameController.text,
       password: _passwordController.text,
     );
 
-    // Update UI based on what Django returned
-    setState(() {
+    setState(() { //redraw with the result
       _isLoading = false;
       if (result['statusCode'] == 201) {
         _message = 'Account created! Check your email to verify.';
       } else {
-        // Show whatever error Django sent back
-        _message = 'Signup failed: ${result['body']}';
+        _message = 'Signup failed: ${result['body']['error'] ?? result['body']}';
       }
     });
   }
 
-  // Build = describes what to draw on the screen
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { //describes what to draw on screen, reruns on every setState
     return Scaffold(
-      // Top app bar
       appBar: AppBar(title: const Text('Sign Up')),
-      // Main content, padded inside from screen edges
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        // Column = stack things vertically
+        padding: const EdgeInsets.all(24.0), //space around edges so content doesn't touch screen border
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Email input
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
               keyboardType: TextInputType.emailAddress,
             ),
-            const SizedBox(height: 16),
-            // Username input
+            const SizedBox(height: 16), //spacing
             TextField(
               controller: _usernameController,
               decoration: const InputDecoration(labelText: 'Username'),
             ),
-            const SizedBox(height: 16),
-            // Password input (obscureText hides the characters)
+            const SizedBox(height: 16), //spacing
             TextField(
               controller: _passwordController,
               decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
+              obscureText: true, //hides characters as dots
             ),
-            const SizedBox(height: 24),
-            // Sign Up button - shows spinner while loading
+            const SizedBox(height: 24), // spacing
             ElevatedButton(
-              // If loading, disable the button (onPressed: null)
-              onPressed: _isLoading ? null : _handleSignup,
+              onPressed: _isLoading ? null : _handleSignup, //disabled while loading
               child: _isLoading
-                  ? const CircularProgressIndicator()
+                  ? const CircularProgressIndicator() //spinner while waiting
                   : const Text('Sign Up'),
             ),
-            const SizedBox(height: 16),
-            // Status message (success or error)
-            Text(_message, textAlign: TextAlign.center),
+            const SizedBox(height: 16), // spacing
+            Text(_message, textAlign: TextAlign.center), //success or error message
           ],
         ),
       ),

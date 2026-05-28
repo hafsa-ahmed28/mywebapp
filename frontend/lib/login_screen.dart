@@ -1,11 +1,7 @@
-// Flutter's UI building blocks
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; //Flutter UI building blocks
+import 'api_service.dart'; //backend communication helper
 
-// Our backend communication helper
-import 'api_service.dart';
-
-// Stateful because text input, loading, and messages all change over time
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget { //stateful bec text, loading, and mssgs change
   const LoginScreen({super.key});
 
   @override
@@ -13,74 +9,62 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // Handles for reading what the user typed
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(); //reads what user typed in email field
+  final _passwordController = TextEditingController(); //reads what user typed in password field
 
-  // Track loading state to show a spinner during the network call
-  bool _isLoading = false;
-  // Status message shown below the form
-  String _message = '';
+  bool _isLoading = false; 
+  String _message = ''; // success or error message shown below the form
 
-  // Runs when user taps the Log In button
-  Future<void> _handleLogin() async {
-    // Tell Flutter to redraw with the loading state
-    setState(() {
+  Future<void> _handleLogin() async { //runs when user taps Log In
+    setState(() { //tell Flutter to redraw
       _isLoading = true;
       _message = '';
     });
 
-    // Send credentials to Django
-    final result = await ApiService.login(
+    final result = await ApiService.login( //send credentials to Django
       email: _emailController.text,
       password: _passwordController.text,
     );
 
-    // Redraw with the result
-    setState(() {
+    setState(() { //redraw with the result
       _isLoading = false;
       if (result['statusCode'] == 200) {
         _message = 'Welcome! Login successful.';
       } else {
-        // Django sends back { "error": "..." } - pull out the error text
-        _message = 'Login failed: ${result['body']['error'] ?? result['body']}';
+        _message = 'Login failed: ${result['body']['error'] ?? result['body']}'; // show error Django sent back
       }
     });
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { //describes what to draw on screen, reruns on every setState
     return Scaffold(
       appBar: AppBar(title: const Text('Log In')),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(24.0), //space around edges so content doesn't touch screen border
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Email field
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
               keyboardType: TextInputType.emailAddress,
             ),
-            const SizedBox(height: 16),
-            // Password field (obscured)
+            const SizedBox(height: 16), //spacing
             TextField(
               controller: _passwordController,
               decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
+              obscureText: true, //hides characters as dots
             ),
-            const SizedBox(height: 24),
-            // Log In button — disabled while loading
+            const SizedBox(height: 24), // spacing
             ElevatedButton(
-              onPressed: _isLoading ? null : _handleLogin,
+              onPressed: _isLoading ? null : _handleLogin, //disabled while loading
               child: _isLoading
-                  ? const CircularProgressIndicator()
+                  ? const CircularProgressIndicator() //spinner while waiting
                   : const Text('Log In'),
             ),
-            const SizedBox(height: 16),
-            // Success or error message
-            Text(_message, textAlign: TextAlign.center),
+            const SizedBox(height: 16), // spacing
+            Text(_message, textAlign: TextAlign.center), //success or error message
           ],
         ),
       ),

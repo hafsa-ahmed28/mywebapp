@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path #defines URL rules
 from .views import signup, verify_email, login
 
 urlpatterns = [
