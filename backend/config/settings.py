@@ -144,3 +144,5 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '') #Sender Gmail (env var i
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '') #16-char app password
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@example.com') #From: field of the verification email
 AUTH_USER_MODEL = 'accounts.User' # tells Django to use our custom User model instead of the built-in one
+CORS_ALLOW_ALL_ORIGINS = True # allows all origins 
+CORS_ALLOW_HEADERS = ['content-type', 'authorization'] # allowed request headers
