@@ -25,16 +25,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Secret key used by Django for encryption/security, read from env var, never hardcoded
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-only-not-secure-replace-me')
 
-# Shows detailed error pages — True for dev only, must be False in production
+# Shows detailed error pages
 DEBUG = True
 
-# Only respond to requests from these addresses — rejects everything else
+# Only respond to requests from these addresses 
 ALLOWED_HOSTS = ['10.0.0.216', 'localhost', '127.0.0.1']
 
 
 # APPS
 INSTALLED_APPS = [
-    # Built-in Django apps (pre-written, do not remove)
+    # Built-in Django apps (pre-written)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     # Third-party: allows Flutter (different origin) to talk to Django
     'corsheaders',
-    # Our custom app — handles user signup, verification, login
+    # My custom app, handles user signup, verification, login
     'accounts',
 ]
 
@@ -72,7 +72,7 @@ MIDDLEWARE = [
 # Tells Django where the main URL file lives
 ROOT_URLCONF = 'config.urls'
 
-TEMPLATES = [
+TEMPLATES = [ #Pre written
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
