@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY
-# Secret key used by Django for encryption/security — read from env var, never hardcoded
+# Secret key used by Django for encryption/security, read from env var, never hardcoded
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-only-not-secure-replace-me')
 
 # Shows detailed error pages — True for dev only, must be False in production
