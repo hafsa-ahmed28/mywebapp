@@ -1,5 +1,5 @@
 ## MyWebApp 
-- A full-stack web application built as a proof of skill assignment for TriSpects Inc.
+- A full-stack web application 
 
 ## What it does
 - User registration with email verification and login. A user signs up, receives a verification email, clicks the link to confirm their account, and can then log in.
