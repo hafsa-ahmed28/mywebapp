@@ -25,7 +25,7 @@ def signup(request):
             f"Click here to verify: {verification_link}",
             settings.DEFAULT_FROM_EMAIL, #sender email from settings.py
             [user.email], #the user who just signed up
-            fail_silently=True, #if email fails, don't crash — user is already saved
+            fail_silently=True, #if email fails, don't crash, user is already saved
         )
 
         return Response({"message": "User created", "verification_link": verification_link}, status=status.HTTP_201_CREATED) # 201 = created
@@ -36,7 +36,7 @@ def signup(request):
 # EMAIL VERIFICATION
 @api_view(['GET']) #GET only 
 def verify_email(request):
-    token = request.query_params.get('token') #reads token from URL e.g. /api/verify/?token=abc123
+    token = request.query_params.get('token') #reads token from URL 
     try:
         user = User.objects.get(verification_token=token) #find user by token
         user.is_verified = True #mark as verified
