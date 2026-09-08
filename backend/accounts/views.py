@@ -18,7 +18,7 @@ def signup(request):
         user.verification_token = token
         user.save()
 
-        verification_link = f"http://10.0.0.216:8000/api/verify/?token={token}" # link sent in email
+        verification_link = f"http://127.0.0.1:8000/api/verify/?token={token}" # link sent in email
 
         send_mail(
             "Verify Your Email",

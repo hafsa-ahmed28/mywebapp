@@ -2,7 +2,7 @@ import 'dart:convert'; //converts between JSON text and Dart objects
 import 'package:http/http.dart' as http; //for sending HTTP requests
 
 class ApiService { //groups all backend communication in one place
-  static const String baseUrl = 'https://10.0.0.216/api'; 
+  static const String baseUrl = 'http://127.0.0.1:8000/api';
 
 
   // SIGNUP
